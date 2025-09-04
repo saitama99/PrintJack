@@ -222,12 +222,10 @@ sudo systemctl status printjack-server
 ### Defensive Countermeasures
 - **USB Port Controls**: Group Policy restrictions on USB device installation
 - **Print Auditing**: Windows print job logging and monitoring
-- **Network Segmentation**: Isolated printer networks
 - **Driver Restrictions**: Limitation of approved printer drivers
 
 ### Detection Vectors
 - Unusual USB device enumeration patterns
-- Network traffic to unknown HTTP servers
 - Unexpected printer installations in system logs
 - Document conversion process signatures
 
