@@ -61,8 +61,8 @@ PrintJack is a comprehensive USB printer emulation and data capture system desig
 
 ### Automated Installation
 ```bash
-git clone https://github.com/your-org/printjack.git
-cd printjack
+git clone https://github.com/your-org/PrintJack.git
+cd PrintJack
 sudo bash install.sh
 sudo reboot
 ```
