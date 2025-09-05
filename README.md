@@ -1,8 +1,20 @@
+<div align="center">
+<pre>
+██████╗ ██████╗ ██╗███╗   ██╗████████╗     ██╗ █████╗  ██████╗██╗  ██╗
+██╔══██╗██╔══██╗██║████╗  ██║╚══██╔══╝     ██║██╔══██╗██╔════╝██║ ██╔╝
+██████╔╝██████╔╝██║██╔██╗ ██║   ██║        ██║███████║██║     █████╔╝ 
+██╔═══╝ ██╔══██╗██║██║╚██╗██║   ██║   ██   ██║██╔══██║██║     ██╔═██╗ 
+██║     ██║  ██║██║██║ ╚████║   ██║   ╚█████╔╝██║  ██║╚██████╗██║  ██╗
+╚═╝     ╚═╝  ╚═╝╚═╝╚═╝  ╚═══╝   ╚═╝    ╚════╝ ╚═╝  ╚═╝ ╚═════╝╚═╝  ╚═╝
+USB PRINTER CAPTURE & INTERCEPT SYSTEM
+</pre>
+</div>
+
 # PrintJack - USB Printer Capture & Intercept System
 
 ## Overview
 
-PrintJack is a comprehensive USB printer emulation and data capture framework designed for penetration testing and red team operations. Built on Raspberry Pi Zero W hardware, it presents itself as a legitimate USB printer to target systems while capturing, converting, and exfiltrating print jobs.
+PrintJack is a comprehensive USB printer emulation and data capture system designed for penetration testing and red team operations. Built on Raspberry Pi Zero W hardware, it presents itself as a legitimate USB printer to target systems while capturing, converting, and exfiltrating print jobs.
 
 ## Key Features
 
