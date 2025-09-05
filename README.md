@@ -63,19 +63,19 @@ See `install.sh` for detailed step-by-step installation procedures.
 ### Quick Start
 ```bash
 # Basic print capture
-sudo printjack
+sudo bash printjack.sh
 
 # Print capture with file exfiltration
-sudo printjack --exfil
+sudo bash printjack.sh --exfil
 
 # Print capture with USB rubber ducky
-sudo printjack --ducky
+sudo bash printjack.sh --ducky
 
 # Print capture with automated printer setup
-sudo printjack --fuzz
+sudo bash printjack.sh --fuzz
 
-# Combined operations
-sudo printjack --exfil --ducky
+# Combined operations for targeting USB001
+sudo bash printjack.sh --exfil --ducky
 ```
 
 ### Command Reference
@@ -97,8 +97,8 @@ start-printjack      # Initialize USB gadget only
 capture-printjack    # Start print job capture
 convert-printjack    # Manual file conversion
 printjack-server     # File exfiltration server only
-printjack-ducky      # USB rubber ducky only
-printjack-fuzz       # USB port fuzzing only
+printjack-ducky      # USB rubber ducky only to auto install drivers on USB001
+printjack-fuzz       # USB port fuzzing only, to auto install on any available USB00* port
 ```
 
 ## Target System Configuration
