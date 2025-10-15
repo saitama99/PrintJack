@@ -69,7 +69,7 @@ sudo apt-get update
 sudo apt-get install dos2unix
 
 # Convert the line endings
-dos2unix install.sh
+dos2unix *.sh
 
 # Now run it
 sudo bash install.sh
