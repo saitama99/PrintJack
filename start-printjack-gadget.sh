@@ -1,7 +1,5 @@
 #!/bin/bash
 # USB Printer Gadget + HID Keyboard - Start Script
-
-
 set -e
 
 if [ "$EUID" -ne 0 ]; then
@@ -10,6 +8,15 @@ if [ "$EUID" -ne 0 ]; then
 fi
 
 echo "Starting USB printer + HID keyboard gadget..."
+
+# Auto-detect USB Device Controller
+UDC=$(ls /sys/class/udc/ 2>/dev/null | head -n 1)
+if [ -z "$UDC" ]; then
+    echo "ERROR: No USB Device Controller found!"
+    echo "Make sure dwc2 is loaded and you rebooted after install"
+    exit 1
+fi
+echo "Detected UDC: $UDC"
 
 # Load modules
 modprobe libcomposite
@@ -22,7 +29,7 @@ if [ -d "/sys/kernel/config/usb_gadget/printer" ]; then
     cd /sys/kernel/config/usb_gadget/printer
     
     # Try to enable the existing gadget
-    echo "20980000.usb" > UDC 2>/dev/null || {
+    echo "$UDC" > UDC 2>/dev/null || {
         echo "Failed to restart existing gadget"
         exit 1
     }
@@ -82,7 +89,7 @@ ln -sf /sys/kernel/config/usb_gadget/printer/functions/printer.0 configs/c.1/pri
 ln -sf /sys/kernel/config/usb_gadget/printer/functions/hid.0 configs/c.1/hid.0
 
 # Enable gadget
-echo "20980000.usb" > UDC
+echo "$UDC" > UDC
 
 # Check result
 if [ -e /dev/g_printer0 ] && [ -e /dev/hidg0 ]; then
