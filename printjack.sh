@@ -191,24 +191,32 @@ else
     echo -e "${YELLOW}[2/5] USB Rubber Ducky/Fuzzing: ${NC}Disabled"
 fi
 
-# Step 3: Start File Exfiltration Server (if enabled)  
+# Step 3: Start File Exfiltration Server (if enabled)
 if [ "$ENABLE_EXFIL" = true ]; then
     echo -e "${YELLOW}[3/5] Starting File Exfiltration Server...${NC}"
     if [ -f "$SCRIPT_DIR/printjack_exfil.py" ]; then
         # Get Pi IP address
         PI_IP=$(hostname -I | awk '{print $1}')
         
-        (
-            cd "$SCRIPT_DIR"
-            python3 printjack_exfil.py >/dev/null 2>&1
-        ) &
+        # Start exfil server - DON'T redirect output
+        cd "$SCRIPT_DIR"
+        python3 printjack_exfil.py </dev/null &>/dev/null &
         EXFIL_PID=$!
         
-        # Give it a moment to start and check if it's still running
-        sleep 2
-        if kill -0 $EXFIL_PID 2>/dev/null; then
+        # Give it MORE time to start
+        sleep 5
+        
+        if ps -p $EXFIL_PID > /dev/null; then
             echo -e "  ${GREEN}✓${NC} Exfiltration server running (PID: $EXFIL_PID)"
             echo -e "  ${BLUE}→${NC} Access files at: http://$PI_IP"
+            
+            # Verify it's actually listening
+            sleep 2
+            if curl -s http://localhost >/dev/null 2>&1; then
+                echo -e "  ${GREEN}✓${NC} Server is responding"
+            else
+                echo -e "  ${YELLOW}⚠${NC} Server started but not responding yet"
+            fi
         else
             echo -e "  ${RED}✗${NC} Failed to start exfiltration server"
             EXFIL_PID=""
@@ -326,4 +334,5 @@ else
 fi
 
 # Normal exit cleanup
+
 cleanup
