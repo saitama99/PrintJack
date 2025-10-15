@@ -63,6 +63,17 @@ PrintJack is a comprehensive USB printer emulation and data capture tool designe
 ```bash
 git clone https://github.com/your-org/PrintJack.git
 cd PrintJack
+
+# Install dos2unix if not already installed
+sudo apt-get update
+sudo apt-get install dos2unix
+
+# Convert the line endings
+dos2unix install.sh
+
+# Now run it
+sudo bash install.sh
+
 sudo bash install.sh
 sudo reboot
 ```
